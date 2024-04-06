@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MapleStory Latency Tracker</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <h1>Welcome to MapleStory Latency Tracker</h1>
+    <p>This is the homepage of the MapleStory Latency Tracker.</p>
+
+    <!-- Display Top 5 Most Unstable Channels -->
+    <div id="topUnstableChannels">
+        <h2>Top 5 Most Unstable Channels</h2>
+        <ul>
+            <% for (let i = 0; i < 5; i++) { %>
+                <li><%= unstableChannels[i].name %>: <%= unstableChannels[i].unstable %>  <%= channelLatencies[unstableChannels[i].name] %> ms</li>
+            <% } %>
+        </ul>
+    </div>
+
+    <!-- Display Channel Latency Averages -->
+    <div id="latencyResult">
+        <h2>Channel Latency Averages</h2>
+        <ul>
+            <% Object.keys(channelLatencies).forEach(channel => { %>
+                <li><%= channel %>: <%= channelLatencies[channel] %> ms</li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <!--  JavaScript code here -->
+
+</body>
+</html>
