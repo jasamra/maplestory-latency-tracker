@@ -13,8 +13,13 @@ app.set('views', './views');
 // Store the latency data for each channel
 let channelLatencies = {};
 
+// Queue to store latencies for each channel
+const latencyQueues = {};
 
-// Define a function to measure latency using TCP connections
+// Window size for sliding window average
+const windowSize = 10;
+
+// Function to measure latency using TCP connections
 async function measureLatency(address, port) {
     console.log(`Attempting to measure latency to ${address}:${port}`);
     return new Promise((resolve, reject) => {
@@ -34,8 +39,7 @@ async function measureLatency(address, port) {
     });
 }
 
-
-// Define a function to update channel latencies
+// Function to update channel latencies
 async function updateLatencies() {
     const channels = [
         { name: "Channel 1", address: "35.155.204.207", port: 8585 },
@@ -67,35 +71,55 @@ async function updateLatencies() {
         { name: "Channel 27", address: "54.185.209.29", port: 8585 },
         { name: "Channel 28", address: "52.12.53.225", port: 8585 },
         { name: "Channel 29", address: "54.189.33.238", port: 8585 },
-        { name: "Channel 30", address: "54.188.84.238", port: 8585 }
+        { name: "Channel 30", address: "54.188.84.238", port: 8585 },
+        { name: "Channel 31", address: "44.234.162.14", port: 8585 },
+        { name: "Channel 32", address: "44.234.162.13", port: 8585 },
+        { name: "Channel 33", address: "44.234.161.92", port: 8585 },
+        { name: "Channel 34", address: "44.234.161.48", port: 8585 },
+        { name: "Channel 35", address: "44.234.160.137", port: 8585 },
+        { name: "Channel 36", address: "44.234.161.28", port: 8585 },
+        { name: "Channel 37", address: "44.234.162.100", port: 8585 },
+        { name: "Channel 38", address: "44.234.161.69", port: 8585 },
+        { name: "Channel 39", address: "44.234.162.145", port: 8585 },
+        { name: "Channel 40", address: "44.234.162.130", port: 8585 }
+
+
     ];
 
-    const latencies = {};
-
-    // Measure latency for each channel
     for (const channel of channels) {
         try {
             const latency = await measureLatency(channel.address, channel.port);
-            latencies[channel.name] = latency;
-            console.log(`Latency to ${channel.name} (${channel.address}): ${latency} ms`);
+            // Initialize the latency queue for the channel if it doesn't exist
+            if (!latencyQueues[channel.name]) {
+                latencyQueues[channel.name] = [];
+            }
+            // Add the new latency to the queue
+            latencyQueues[channel.name].push(latency);
+            // Remove the oldest latency if the queue size exceeds the window size
+            if (latencyQueues[channel.name].length > windowSize) {
+                latencyQueues[channel.name].shift();
+            }
+            // Calculate the sliding window average latency
+            const slidingWindowAverage = latencyQueues[channel.name].reduce((acc, curr) => acc + curr, 0) / latencyQueues[channel.name].length;
+            const roundedAverage = Math.round(slidingWindowAverage * 100) / 100; // Round to two decimal places
+            console.log(`Sliding window average latency for ${channel.name}: ${roundedAverage} ms`);
+            // Update channel latencies
+            channelLatencies[channel.name] = roundedAverage;
+
         } catch (error) {
             console.error(`Error measuring latency for ${channel.name} (${channel.address}):`, error.message);
         }
     }
-
-    // Update channel latencies
-    channelLatencies = latencies;
 }
-
 
 // Update channel latencies initially and then every 20 seconds
 updateLatencies();
 const interval = setInterval(updateLatencies, 20000); // 20 seconds interval
 
-// Stop updating after 1 minutes
-setTimeout(() => {
-    clearInterval(interval);
-}, 5 * 60 * 1000); // 1 minutes in milliseconds
+// Stop updating after 5 minute
+//setTimeout(() => {
+//    clearInterval(interval);
+//}, 5 * 60 * 1000); // 5 minute in milliseconds
 
 // Define a function to calculate instability of channels
 function calculateInstability(latencies) {
@@ -129,7 +153,10 @@ function calculateInstability(latencies) {
     return unstableChannels;
 }
 
-
+// Define a route handler to serve data for the client-side chart
+app.get('/data', (req, res) => {
+    res.json(channelLatencies);
+});
 
 // Define a route handler for the root URL ("/")
 app.get('/', (req, res) => {
@@ -137,7 +164,11 @@ app.get('/', (req, res) => {
     const unstableChannels = calculateInstability(channelLatencies);
     // Render the index.ejs view with the channel latencies
     res.render('index', { channelLatencies, unstableChannels });
+    // Update the Chart.js chart with the latest latency data
+    updateChart(channelLatencies);
 });
+app.use(express.static('public'));
+
 
 // Start the Express server
 app.listen(port, () => {

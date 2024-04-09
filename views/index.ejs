@@ -4,21 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MapleStory Latency Tracker</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 </head>
 <body>
     <h1>Welcome to MapleStory Latency Tracker</h1>
-    <p>This is the homepage of the MapleStory Latency Tracker.</p>
+    <p>Kronos Server</p>
 
     <!-- Display Top 5 Most Unstable Channels -->
-    <div id="topUnstableChannels">
+    <div id="topUnstableChannels" class="container">
         <h2>Top 5 Most Unstable Channels</h2>
         <ul>
             <% for (let i = 0; i < 5; i++) { %>
-                <li><%= unstableChannels[i].name %>: <%= unstableChannels[i].unstable %>  <%= channelLatencies[unstableChannels[i].name] %> ms</li>
+                <li class="box"><%= unstableChannels[i].name %>: <%= unstableChannels[i].unstable %>  <%= channelLatencies[unstableChannels[i].name] %> ms</li>
             <% } %>
         </ul>
     </div>
+
+    <!-- Display Top 5 Highest Latencies -->
+    <div id="topHighestLatencies" class="container">
+        <h2>Top 5 Highest Latencies</h2>
+        <ul>
+            <% 
+            const sortedChannels = Object.entries(channelLatencies).sort((a, b) => b[1] - a[1]);
+            const top5 = sortedChannels.slice(0, 5);
+            top5.forEach(([channel, latency]) => { %>
+                <li class="box"><%= channel %>: <%= latency %> ms</li>
+            <% }); %>
+        </ul>
+    </div>
+
+    <!-- Display Channel Latency Graph -->
+    <canvas id="latencyChart" width="400" height="100"></canvas>
+    <script src="client.js"></script>
+
 
     <!-- Display Channel Latency Averages -->
     <div id="latencyResult">
@@ -30,7 +49,6 @@
         </ul>
     </div>
 
-    <!--  JavaScript code here -->
-
+    
 </body>
 </html>

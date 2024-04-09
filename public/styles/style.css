@@ -4,9 +4,24 @@
     gap: 10px; /* Adjust as needed */
 }
 
+
+#topUnstableChannels,
+#topHighestLatencies {
+    width: 45%; /* Adjust width as needed */
+    margin-right: 5%; /* Adjust spacing between lists */
+}
+
+#topUnstableChannels {
+    float: left;
+}
+
+#topHighestLatencies {
+    float: right;
+}
+
 .box {
-    width: calc(25% - 10px); /* Adjust box width as needed */
-    height: 100px; /* Adjust box height as needed */
+    width: calc(152px); /* Adjust box width as needed */
+    height: 55px; /* Adjust box height as needed */
     background-color: #f0f0f0; /* Adjust background color as needed */
     border: 1px solid #ccc; /* Adjust border properties as needed */
     display: flex;
@@ -14,4 +29,15 @@
     align-items: center;
     font-size: 14px; /* Adjust font size as needed */
     font-weight: bold;
+}
+.channel {
+    font-weight: bold;
+}
+
+.ms {
+    font-size: 12px; /* Adjust font size as needed */
+}
+
+.unstable {
+    font-style: italic;
 }
