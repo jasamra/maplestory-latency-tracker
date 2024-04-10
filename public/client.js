@@ -1,8 +1,12 @@
 // Fetch data from the server and update the chart
 async function fetchDataAndUpdateChart() {
-    const response = await fetch('/data'); // Returns channel latency data
-    const data = await response.json();
-    updateChart(data);
+    try {
+        const response = await fetch('/data'); // Returns channel latency data
+        const data = await response.json();
+        updateChart(data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 // Initialize an empty Chart.js chart
@@ -39,7 +43,8 @@ function updateChart(channelData) {
     }
 }
 
-// Fetch data and update the chart on page load
-window.addEventListener('load', () => {
-    fetchDataAndUpdateChart();
-});
+// Fetch data and update the chart initially
+fetchDataAndUpdateChart();
+
+// Set interval to fetch data and update the chart every 20 seconds
+setInterval(fetchDataAndUpdateChart, 20000);
