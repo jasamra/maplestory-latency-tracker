@@ -8,60 +8,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 </head>
 <body>
-    <h1>Welcome to MapleStory Latency Tracker</h1>
-    <p>Kronos Server</p>
+    <header>
+        <h1>Welcome to MapleStory Latency Tracker</h1>
+        <p>Kronos Server</p>
+    </header>
 
-    <!-- Display Top 5 Most Unstable Channels -->
-    <div id="topUnstableChannels" class="container">
-        <h2>Top 5 Most Unstable Channels</h2>
-        <ul>
-            <% for (let i = 0; i < 5; i++) { %>
-                <li class="box"><%= unstableChannels[i].name %>: <%= unstableChannels[i].unstable %>  <%= channelLatencies[unstableChannels[i].name] %> ms</li>
-            <% } %>
-        </ul>
-    </div>
+    <main>
+        <section id="topUnstableChannels" class="container">
+            <h2>Top 5 Most Unstable Channels</h2>
+            <ul>
+                <% for (let i = 0; i < 5; i++) { %>
+                    <li class="box"><%= unstableChannels[i].name %>: <%= unstableChannels[i].unstable %>  <%= channelLatencies[unstableChannels[i].name] %> ms</li>
+                <% } %>
+            </ul>
+        </section>
 
-    <!-- Display Top 5 Highest Latencies -->
-    <div id="topHighestLatencies" class="container">
-        <h2>Top 5 Highest Latencies</h2>
-        <ul>
-            <% 
-            const sortedChannels = Object.entries(channelLatencies).sort((a, b) => b[1] - a[1]);
-            const top5 = sortedChannels.slice(0, 5);
-            top5.forEach(([channel, latency]) => { %>
-                <li class="box"><%= channel %>: <%= latency %> ms</li>
-            <% }); %>
-        </ul>
-    </div>
+        <section id="topHighestLatencies" class="container">
+            <h2>Top 5 Highest Latencies</h2>
+            <ul>
+                <% 
+                const sortedChannels = Object.entries(channelLatencies).sort((a, b) => b[1] - a[1]);
+                const top5 = sortedChannels.slice(0, 5);
+                top5.forEach(([channel, latency]) => { %>
+                    <li class="box"><%= channel %>: <%= latency %> ms</li>
+                <% }); %>
+            </ul>
+        </section>
 
-    <!-- Display Channel Latency Graph -->
-    <canvas id="latencyChart" width="400" height="100"></canvas>
+        <section id="channelLatencyGraph" class="full-width">
+            <h2>Channel Latency Graph</h2>
+            <canvas id="latencyChart" width="800" height="200"></canvas>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 MapleStory Latency Tracker</p>
+    </footer>
+
     <script type="text/javascript" src="client.js"></script>
-
-
-    <!-- Display Channel Latency Averages -->
-    <div id="latencyResult">
-        <h2>Channel Latency Averages</h2>
-        <ul>
-            <% Object.keys(channelLatencies).forEach(channel => { %>
-                <li><%= channel %>: <%= channelLatencies[channel] %> ms</li>
-            <% }); %>
-        </ul>
-    </div>
-
-    <!-- Include the auto reload script here -->
-    <script>
-        // Function to automatically reload the page every 20 seconds
-        function autoReloadPage() {
-            setInterval(() => {
-                window.location.reload();
-            }, 20000);
-        }
-
-        // Call the autoReloadPage function when the window loads
-        window.addEventListener('load', autoReloadPage);
-    </script>
-
-    
 </body>
 </html>
