@@ -4,6 +4,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+header {
+    background-image: url('/styles TEST /images/shangrila.jpg');
+    background-size: cover;
+}
+
 
 body {
     font-family: Arial, sans-serif;

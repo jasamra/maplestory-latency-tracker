@@ -9,8 +9,10 @@
 </head>
 <body>
     <header>
+        <img src="/styles/images/mushroom.png" alt="Mushroom" height="50">
         <h1>Welcome to MapleStory Latency Tracker</h1>
-        <p>Kronos Server</p>
+        <img src="/styles/images/kronos.png" alt="Mushroom" height="30">
+        <p>Kronos</p>
     </header>
 
     <main>
@@ -40,6 +42,18 @@
             <canvas id="latencyChart" width="800" height="200"></canvas>
         </section>
     </main>
+    <!-- Include the auto reload script here -->
+    <script>
+        // Function to automatically reload the page every 20 seconds
+        function autoReloadPage() {
+            setInterval(() => {
+                window.location.reload();
+            }, 20000);
+        }
+
+        // Call the autoReloadPage function when the window loads
+        window.addEventListener('load', autoReloadPage);
+    </script>
 
     <footer>
         <p>&copy; 2024 MapleStory Latency Tracker</p>
