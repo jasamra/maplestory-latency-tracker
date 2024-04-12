@@ -2,7 +2,8 @@ const express = require('express');
 const net = require('net');
 
 const app = express();
-const port = 3000;
+// Set the port to the environment variable PORT, or default to 3000 if PORT is not set
+const PORT = process.env.PORT || 3000;
 
 // Set EJS as the default view engine
 app.set('view engine', 'ejs');
@@ -162,8 +163,15 @@ app.get('/data', (req, res) => {
 app.get('/', (req, res) => {
     // Calculate the instability of channels
     const unstableChannels = calculateInstability(channelLatencies);
+
+    // Get the top 5 highest latencies
+    const top5Latencies = Object.entries(channelLatencies)
+        .sort(([, latencyA], [, latencyB]) => latencyB - latencyA)
+        .slice(0, 5)
+        .map(([name, latency]) => ({ name, latency }));
+
     // Render the index.ejs view with the channel latencies
-    res.render('index', { channelLatencies, unstableChannels });
+    res.render('index', { channelLatencies, unstableChannels, top5Latencies });
     // Update the Chart.js chart with the latest latency data
     updateChart(channelLatencies);
 });
