@@ -179,6 +179,6 @@ app.use(express.static('public'));
 
 
 // Start the Express server
-app.listen(port, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${port}`);
 });
