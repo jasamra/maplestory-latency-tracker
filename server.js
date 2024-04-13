@@ -2,8 +2,8 @@ const express = require('express');
 const net = require('net');
 
 const app = express();
-// Set the port to the environment variable PORT, or default to 3000 if PORT is not set
-const PORT = process.env.PORT || 3000;
+// Set the port to the environment variable port, or default to 3000 if port is not set
+const port = process.env.port || 3000;
 
 // Set EJS as the default view engine
 app.set('view engine', 'ejs');
@@ -179,6 +179,6 @@ app.use(express.static('public'));
 
 
 // Start the Express server
-app.listen(PORT, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
