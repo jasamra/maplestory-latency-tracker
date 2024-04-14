@@ -5,7 +5,7 @@ async function fetchDataAndUpdateChart() {
         const data = await response.json();
         updateChart(data);
     } catch (error) {
-        //console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     }
 }
 

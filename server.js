@@ -33,7 +33,7 @@ async function measureLatency(address, port) {
             resolve(latency);
         });
         socket.on('error', (error) => {
-            //console.error(`Error measuring latency to ${address}:${port}:`, error.message);
+            console.error(`Error measuring latency to ${address}:${port}:`, error.message);
             socket.destroy();
             reject(error);
         });
@@ -108,7 +108,7 @@ async function updateLatencies() {
             channelLatencies[channel.name] = roundedAverage;
 
         } catch (error) {
-            //console.error(`Error measuring latency for ${channel.name} (${channel.address}):`, error.message);
+            console.error(`Error measuring latency for ${channel.name} (${channel.address}):`, error.message);
         }
     }
 }
@@ -180,5 +180,5 @@ app.use(express.static('public'));
 
 // Start the Express server
 app.listen(port, () => {
-    //console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
