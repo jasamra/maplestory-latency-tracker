@@ -28,12 +28,12 @@ async function measureLatency(address, port) {
         const socket = net.createConnection({ host: address, port }, () => {
             const endTime = Date.now();
             const latency = endTime - startTime;
-            console.log(`Latency measurement successful: ${latency} ms`);
+            //console.log(`Latency measurement successful: ${latency} ms`);
             socket.destroy();
             resolve(latency);
         });
         socket.on('error', (error) => {
-            console.error(`Error measuring latency to ${address}:${port}:`, error.message);
+            //console.error(`Error measuring latency to ${address}:${port}:`, error.message);
             socket.destroy();
             reject(error);
         });
@@ -103,12 +103,12 @@ async function updateLatencies() {
             // Calculate the sliding window average latency
             const slidingWindowAverage = latencyQueues[channel.name].reduce((acc, curr) => acc + curr, 0) / latencyQueues[channel.name].length;
             const roundedAverage = Math.round(slidingWindowAverage * 100) / 100; // Round to two decimal places
-            console.log(`Sliding window average latency for ${channel.name}: ${roundedAverage} ms`);
+            //console.log(`Sliding window average latency for ${channel.name}: ${roundedAverage} ms`);
             // Update channel latencies
             channelLatencies[channel.name] = roundedAverage;
 
         } catch (error) {
-            console.error(`Error measuring latency for ${channel.name} (${channel.address}):`, error.message);
+            //console.error(`Error measuring latency for ${channel.name} (${channel.address}):`, error.message);
         }
     }
 }
@@ -180,5 +180,5 @@ app.use(express.static('public'));
 
 // Start the Express server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    //console.log(`Server is running on port ${port}`);
 });
